@@ -23,34 +23,63 @@ type Task struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
-func main() {
-	Args := os.Args[1:]
-
-	var jsonBlob = []byte(`[
-		{"id": 1, "description": "Monotremata", "status": 0, "createdAt": "0001-01-01T00:00:00Z", "updatedAt": "0001-01-01T00:00:00Z"},
-		{"id": 2, "description": "Monotremata", "status": 0, "createdAt": "0001-01-01T00:00:00Z", "updatedAt": "0001-01-01T00:00:00Z"}
-	]`)
-	var taskMap []Task
-	err := json.Unmarshal(jsonBlob, &taskMap)
-	if err != nil {
-		fmt.Println("error:", err)
+func check(e error) {
+	if e != nil {
+		panic(e)
 	}
-	fmt.Println("taskMap:", taskMap)
+}
 
-	if len(Args) == 0 {
-		err = fmt.Errorf("No arguments!")
+func ReadLog(fileLogName string) map[int]Task {
+	taskMap := make(map[int]Task)
+	b, err := os.ReadFile(fileLogName)
+	if err != nil {
+		b, err = json.Marshal(taskMap)
+		check(err)
+		os.WriteFile(fileLogName, b, os.ModeAppend)
+	}
+	err = json.Unmarshal(b, &taskMap)
+	check(err)
+	return taskMap
+}
+
+func main() {
+
+	const fileLogName = "/tmp/task_tracker_log"
+
+	args := os.Args[1:]
+
+	if len(args) == 0 {
+		err := fmt.Errorf("No arguments!")
 		fmt.Println("error:", err)
 		return
 	}
 
-	switch Args[0] {
+	switch args[0] {
 	case "add":
-		// task := new(Task)
-		// task.Id = 1
+		// create new task
+		// read list
+		// add new
+		// write all
 	case "update":
+		// read list
+		// update
+		// write all
 	case "delete":
+		// read list
+		// delete one
+		// write all
 	case "mark-in-progress":
+		// read list
+		// update status
+		// write all
 	case "mark-done":
+		// read list
+		// update status
+		// write all
 	case "list":
+		tasks := ReadLog(fileLogName)
+		for _, t := range tasks {
+			fmt.Println(t)
+		}
 	}
 }
