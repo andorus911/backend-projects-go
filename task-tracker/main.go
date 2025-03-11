@@ -7,6 +7,18 @@ import (
 	"time"
 )
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+type TaskManager struct {
+	path     string
+	taskList map[int]Task
+	nextID   int
+}
+
 type Status byte
 
 const (
@@ -16,50 +28,75 @@ const (
 )
 
 type Task struct {
-	Id          int       `json:"id"`
 	Description string    `json:"description"`
 	Status      Status    `json:"status"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
+func NewTaskManager(path string) *TaskManager {
+	tm := &TaskManager{
+		path:     path,
+		taskList: make(map[int]Task),
+		nextID:   0,
+	}
+
+	return tm
+}
+
+func (tm *TaskManager) ReadList() {
+	b, err := os.ReadFile(tm.path)
+	if err != nil {
+		b, err = json.Marshal(tm.taskList)
+		check(err)
+		os.WriteFile(tm.path, b, os.ModeAppend)
+	}
+	err = json.Unmarshal(b, &tm.taskList)
+	check(err)
+
+	for i := range tm.taskList {
+		if i >= tm.nextID {
+			tm.nextID = i + 1
+		}
 	}
 }
 
-func ReadLog(fileLogName string) map[int]Task {
-	taskMap := make(map[int]Task)
-	b, err := os.ReadFile(fileLogName)
-	if err != nil {
-		b, err = json.Marshal(taskMap)
-		check(err)
-		os.WriteFile(fileLogName, b, os.ModeAppend)
+func (tm *TaskManager) AddTask(desc string) {
+	newTask := Task{
+		Description: desc,
+		Status:      todo,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
-	err = json.Unmarshal(b, &taskMap)
+
+	tm.taskList[tm.nextID] = newTask
+	tm.nextID++
+}
+
+func (tm *TaskManager) WriteList() {
+	b, err := json.Marshal(tm.taskList)
 	check(err)
-	return taskMap
+	err = os.WriteFile(tm.path, b, os.ModeAppend)
+	check(err)
 }
 
 func main() {
 
-	const fileLogName = "/tmp/task_tracker_log"
+	const fileName = "/tmp/task_tracker_log"
+	tm := NewTaskManager(fileName)
+	tm.ReadList()
 
 	args := os.Args[1:]
 
 	if len(args) == 0 {
-		err := fmt.Errorf("No arguments!")
-		fmt.Println("error:", err)
-		return
+		err := fmt.Errorf("no arguments")
+		panic(err)
 	}
 
 	switch args[0] {
 	case "add":
-		// create new task
-		// read list
-		// add new
-		// write all
+		tm.AddTask(args[1])
+		tm.WriteList()
 	case "update":
 		// read list
 		// update
@@ -77,9 +114,6 @@ func main() {
 		// update status
 		// write all
 	case "list":
-		tasks := ReadLog(fileLogName)
-		for _, t := range tasks {
-			fmt.Println(t)
-		}
+
 	}
 }
