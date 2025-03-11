@@ -73,6 +73,13 @@ func (tm *TaskManager) AddTask(desc string) {
 	tm.nextID++
 }
 
+func (tm *TaskManager) List() {
+	for index, task := range tm.taskList {
+		fmt.Printf("ID %d : %s (cr %v, up %v)", index, task.Description, task.CreatedAt, task.UpdatedAt)
+		fmt.Println(task)
+	}
+}
+
 func (tm *TaskManager) WriteFile() {
 	b, err := json.Marshal(tm.taskList)
 	check(err)
