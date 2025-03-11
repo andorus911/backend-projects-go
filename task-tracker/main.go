@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -102,7 +103,18 @@ func main() {
 
 	switch args[0] {
 	case "add":
-		tm.AddTask(args[1])
+		desc := strings.Join(args[1:], " ")
+
+		s := []rune(desc)
+		if len(s) > 0 && s[0] == '"' {
+			s = s[1:]
+		}
+		if len(s) > 0 && s[len(s)-1] == '"' {
+			s = s[:len(s)-1]
+		}
+
+		desc = string(s)
+		tm.AddTask(desc)
 		tm.WriteFile()
 	case "update":
 		// read list
