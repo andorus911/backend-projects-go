@@ -121,6 +121,6 @@ func main() {
 		// update status
 		// write all
 	case "list":
-
+		tm.List()
 	}
 }
