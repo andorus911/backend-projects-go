@@ -44,7 +44,7 @@ func NewTaskManager(path string) *TaskManager {
 	return tm
 }
 
-func (tm *TaskManager) ReadList() {
+func (tm *TaskManager) ReadFile() {
 	b, err := os.ReadFile(tm.path)
 	if err != nil {
 		b, err = json.Marshal(tm.taskList)
@@ -73,7 +73,7 @@ func (tm *TaskManager) AddTask(desc string) {
 	tm.nextID++
 }
 
-func (tm *TaskManager) WriteList() {
+func (tm *TaskManager) WriteFile() {
 	b, err := json.Marshal(tm.taskList)
 	check(err)
 	err = os.WriteFile(tm.path, b, os.ModeAppend)
@@ -84,7 +84,7 @@ func main() {
 
 	const fileName = "/tmp/task_tracker_log"
 	tm := NewTaskManager(fileName)
-	tm.ReadList()
+	tm.ReadFile()
 
 	args := os.Args[1:]
 
@@ -96,7 +96,7 @@ func main() {
 	switch args[0] {
 	case "add":
 		tm.AddTask(args[1])
-		tm.WriteList()
+		tm.WriteFile()
 	case "update":
 		// read list
 		// update
