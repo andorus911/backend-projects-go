@@ -76,8 +76,17 @@ func (tm *TaskManager) AddTask(desc string) {
 
 func (tm *TaskManager) List() {
 	for index, task := range tm.taskList {
-		fmt.Printf("ID %d : %s (cr %v, up %v)", index, task.Description, task.CreatedAt, task.UpdatedAt)
-		fmt.Println(task)
+		var status string
+		switch task.Status {
+		case todo:
+			status = "to do"
+		case inprogress:
+			status = "in progress"
+		case done:
+			status = "done"
+		}
+
+		fmt.Printf("ID %d : *%s* \"%s\" (cr %v, up %v)\n", index, status, task.Description, task.CreatedAt, task.UpdatedAt)
 	}
 }
 
@@ -117,19 +126,15 @@ func main() {
 		tm.AddTask(desc)
 		tm.WriteFile()
 	case "update":
-		// read list
 		// update
 		// write all
 	case "delete":
-		// read list
 		// delete one
 		// write all
 	case "mark-in-progress":
-		// read list
 		// update status
 		// write all
 	case "mark-done":
-		// read list
 		// update status
 		// write all
 	case "list":
