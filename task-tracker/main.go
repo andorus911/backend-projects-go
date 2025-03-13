@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -74,6 +75,13 @@ func (tm *TaskManager) AddTask(desc string) {
 	tm.nextID++
 }
 
+func (tm *TaskManager) Update(index int, desc string) {
+	task := tm.taskList[index]
+	task.Description = desc
+	task.UpdatedAt = time.Now()
+	tm.taskList[index] = task
+}
+
 func (tm *TaskManager) List() {
 	for index, task := range tm.taskList {
 		var status string
@@ -126,8 +134,25 @@ func main() {
 		tm.AddTask(desc)
 		tm.WriteFile()
 	case "update":
-		// update
-		// write all
+		id, err := strconv.Atoi(args[1])
+		if err != nil {
+			err = fmt.Errorf("incorrect ID: %s", args[1])
+			check(err)
+		}
+
+		desc := strings.Join(args[2:], " ")
+
+		s := []rune(desc)
+		if len(s) > 0 && s[0] == '"' {
+			s = s[1:]
+		}
+		if len(s) > 0 && s[len(s)-1] == '"' {
+			s = s[:len(s)-1]
+		}
+
+		desc = string(s)
+		tm.Update(id, desc)
+		tm.WriteFile()
 	case "delete":
 		// delete one
 		// write all
