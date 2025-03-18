@@ -82,6 +82,10 @@ func (tm *TaskManager) Update(index int, desc string) {
 	tm.taskList[index] = task
 }
 
+func (tm *TaskManager) Delete(index int) {
+	delete(tm.taskList, index)
+}
+
 func (tm *TaskManager) List() {
 	for index, task := range tm.taskList {
 		var status string
@@ -154,8 +158,13 @@ func main() {
 		tm.Update(id, desc)
 		tm.WriteFile()
 	case "delete":
-		// delete one
-		// write all
+		id, err := strconv.Atoi(args[1])
+		if err != nil {
+			err = fmt.Errorf("incorrect ID: %s", args[1])
+			check(err)
+		}
+
+		tm.Delete(id)
 	case "mark-in-progress":
 		// update status
 		// write all
