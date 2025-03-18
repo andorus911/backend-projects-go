@@ -86,9 +86,9 @@ func (tm *TaskManager) Delete(index int) {
 	delete(tm.taskList, index)
 }
 
-func (tm *TaskManager) MarkInProgress(index int) {
+func (tm *TaskManager) UpdateStatus(index int, status Status) {
 	task := tm.taskList[index]
-	task.Status = inprogress
+	task.Status = status
 	tm.taskList[index] = task
 }
 
@@ -179,11 +179,17 @@ func main() {
 			check(err)
 		}
 
-		tm.MarkInProgress(id)
+		tm.UpdateStatus(id, inprogress)
 		tm.WriteFile()
 	case "mark-done":
-		// update status
-		// write all
+		id, err := strconv.Atoi(args[1])
+		if err != nil {
+			err = fmt.Errorf("incorrect ID: %s", args[1])
+			check(err)
+		}
+
+		tm.UpdateStatus(id, done)
+		tm.WriteFile()
 	case "list":
 		tm.List()
 	}
