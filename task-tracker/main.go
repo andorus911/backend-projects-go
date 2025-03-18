@@ -165,6 +165,7 @@ func main() {
 		}
 
 		tm.Delete(id)
+		tm.WriteFile()
 	case "mark-in-progress":
 		// update status
 		// write all
