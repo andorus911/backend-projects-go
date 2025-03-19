@@ -97,11 +97,31 @@ func (tm *TaskManager) List() {
 		var status string
 		switch task.Status {
 		case todo:
-			status = "to do"
+			status = "todo"
 		case inprogress:
-			status = "in progress"
+			status = "in-progress"
 		case done:
 			status = "done"
+		}
+
+		fmt.Printf("ID %d : *%s* \"%s\" (cr %v, up %v)\n", index, status, task.Description, task.CreatedAt, task.UpdatedAt)
+	}
+}
+
+func (tm *TaskManager) ListWith(aStatus string) {
+	for index, task := range tm.taskList {
+		var status string
+		switch task.Status {
+		case todo:
+			status = "todo"
+		case inprogress:
+			status = "in-progress"
+		case done:
+			status = "done"
+		}
+
+		if aStatus != status {
+			continue
 		}
 
 		fmt.Printf("ID %d : *%s* \"%s\" (cr %v, up %v)\n", index, status, task.Description, task.CreatedAt, task.UpdatedAt)
@@ -191,6 +211,10 @@ func main() {
 		tm.UpdateStatus(id, done)
 		tm.WriteFile()
 	case "list":
-		tm.List()
+		if len(args) < 2 {
+			tm.List()
+		} else {
+			tm.ListWith(args[1])
+		}
 	}
 }
