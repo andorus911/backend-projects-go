@@ -36,7 +36,7 @@ func main() {
 		log.Fatal(err)
 	}
 	for _, v := range objmap {
-		fmt.Println(v["id"])
+		fmt.Println(v["type"])
 		// switch
 	}
 }
