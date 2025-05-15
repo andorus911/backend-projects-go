@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Unit Converter</title>
+    <style>
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+        
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        
+        .tab button.active {
+            background-color: #ccc;
+        }
+        
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        .converter-form {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        .input-group {
+            margin: 10px 0;
+        }
+        
+        input, select, button {
+            padding: 8px;
+            margin: 5px;
+            width: 200px;
+        }
+        
+        .result {
+            display: none;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'length')">Length</button>
+        <button class="tablinks" onclick="openTab(event, 'weight')">Weight</button>
+        <button class="tablinks" onclick="openTab(event, 'temperature')">Temperature</button>
+    </div>
+
+    <!-- Length -->
+    <div id="length" class="tabcontent">
+        <div class="converter-form">
+            <div class="input-group">
+                <input type="number" id="lengthValue" placeholder="Enter value">
+                <select id="lengthFrom">
+                    <option value="meters">Meters</option>
+                    <option value="kilometers">Kilometers</option>
+                    <option value="miles">Miles</option>
+                </select>
+                <select id="lengthTo">
+                    <option value="meters">Meters</option>
+                    <option value="kilometers">Kilometers</option>
+                    <option value="miles">Miles</option>
+                </select>
+            </div>
+            <button onclick="convert('length')">Convert</button>
+        </div>
+        <div class="result" id="lengthResult"></div>
+    </div>
+
+    <!-- Weight -->
+    <div id="weight" class="tabcontent">
+        <div class="converter-form">
+            <div class="input-group">
+                <input type="number" id="weightValue" placeholder="Enter value">
+                <select id="weightFrom">
+                    <option value="kilograms">Kilograms</option>
+                    <option value="grams">Grams</option>
+                    <option value="pounds">Pounds</option>
+                </select>
+                <select id="weightTo">
+                    <option value="kilograms">Kilograms</option>
+                    <option value="grams">Grams</option>
+                    <option value="pounds">Pounds</option>
+                </select>
+            </div>
+            <button onclick="convert('weight')">Convert</button>
+        </div>
+        <div class="result" id="weightResult"></div>
+    </div>
+
+    <!-- Temperature -->
+    <div id="temperature" class="tabcontent">
+        <div class="converter-form">
+            <div class="input-group">
+                <input type="number" id="tempValue" placeholder="Enter value">
+                <select id="tempFrom">
+                    <option value="celsius">Celsius</option>
+                    <option value="fahrenheit">Fahrenheit</option>
+                    <option value="kelvin">Kelvin</option>
+                </select>
+                <select id="tempTo">
+                    <option value="celsius">Celsius</option>
+                    <option value="fahrenheit">Fahrenheit</option>
+                    <option value="kelvin">Kelvin</option>
+                </select>
+            </div>
+            <button onclick="convert('temperature')">Convert</button>
+        </div>
+        <div class="result" id="tempResult"></div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        function convert(type) {
+            // TODO
+        }
+
+        function reset(type) {
+            document.getElementById(`${type}Value`).value = "";
+            document.querySelector(`#${type} .converter-form`).style.display = "block";
+            document.getElementById(`${type}Result`).style.display = "none";
+        }
+
+        document.getElementsByClassName("tablinks")[0].click();
+    </script>
+</body>
+</html>
