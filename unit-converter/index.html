@@ -148,8 +148,19 @@
             evt.currentTarget.className += " active";
         }
 
-        function convert(type) {
+        async function convert(type) {
             // TODO
+            const value = parseFloat(document.getElementById(`${type}Value`).value);
+            const from = document.getElementById(`${type}From`).value;
+            const to = document.getElementById(`${type}To`).value;  
+
+            const response = await fetch('/api/convert', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({value, from, to})
+            });
+            const data = await response.json();
+            document.getElementById('lengthValue').textContent = data.value;
         }
 
         function reset(type) {
