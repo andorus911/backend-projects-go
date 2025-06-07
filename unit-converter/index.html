@@ -52,7 +52,6 @@
         }
         
         .result {
-            display: none;
             margin: 20px;
             padding: 20px;
             background-color: #f8f9fa;
@@ -175,10 +174,10 @@
             const response = await fetch('/api/convert', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({value, from, to})
+                body: JSON.stringify({type, value, from, to})
             });
             const data = await response.json();
-            document.getElementById(`${type}Value`).textContent = data.value;
+            document.getElementById(`${type}Result`).textContent = data.value;
         }
 
         function reset(type) {
