@@ -48,3 +48,8 @@ Output:
  - Updated 1 comments on PR/issue at Fonderie-VTT/fr-core
  - Updated 2 PRs to Fonderie-VTT/fr-core
 ```
+## Unit converter
+
+Link on the project task: https://roadmap.sh/projects/unit-converter
+
+The project has its own frontend.
