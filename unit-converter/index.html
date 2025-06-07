@@ -73,14 +73,24 @@
             <div class="input-group">
                 <input type="number" id="lengthValue" placeholder="Enter value">
                 <select id="lengthFrom">
-                    <option value="meters">Meters</option>
-                    <option value="kilometers">Kilometers</option>
-                    <option value="miles">Miles</option>
+                    <option value="millimeter">Millimeter</option>
+                    <option value="centimeter">Centimeter</option>
+                    <option value="meter">Meter</option>
+                    <option value="kilometer">Kilometer</option>
+                    <option value="inch">Inch</option>
+                    <option value="foot">Foot</option>
+                    <option value="yard">Yard</option>
+                    <option value="mile">Mile</option>
                 </select>
                 <select id="lengthTo">
-                    <option value="meters">Meters</option>
-                    <option value="kilometers">Kilometers</option>
-                    <option value="miles">Miles</option>
+                    <option value="millimeter">Millimeter</option>
+                    <option value="centimeter">Centimeter</option>
+                    <option value="meter">Meter</option>
+                    <option value="kilometer">Kilometer</option>
+                    <option value="inch">Inch</option>
+                    <option value="foot">Foot</option>
+                    <option value="yard">Yard</option>
+                    <option value="mile">Mile</option>
                 </select>
             </div>
             <button onclick="convert('length')">Convert</button>
@@ -94,14 +104,18 @@
             <div class="input-group">
                 <input type="number" id="weightValue" placeholder="Enter value">
                 <select id="weightFrom">
-                    <option value="kilograms">Kilograms</option>
-                    <option value="grams">Grams</option>
-                    <option value="pounds">Pounds</option>
+                    <option value="milligram">Milligram</option>
+                    <option value="gram">Gram</option>
+                    <option value="kilogram">Kilogram</option>
+                    <option value="ounce">Ounce</option>
+                    <option value="pound">Pound</option>
                 </select>
                 <select id="weightTo">
-                    <option value="kilograms">Kilograms</option>
-                    <option value="grams">Grams</option>
-                    <option value="pounds">Pounds</option>
+                    <option value="milligram">Milligram</option>
+                    <option value="gram">Gram</option>
+                    <option value="kilogram">Kilogram</option>
+                    <option value="ounce">Ounce</option>
+                    <option value="pound">Pound</option>
                 </select>
             </div>
             <button onclick="convert('weight')">Convert</button>
@@ -154,13 +168,17 @@
             const from = document.getElementById(`${type}From`).value;
             const to = document.getElementById(`${type}To`).value;  
 
+            if (from == to) {
+                return;
+            }
+
             const response = await fetch('/api/convert', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({value, from, to})
             });
             const data = await response.json();
-            document.getElementById('lengthValue').textContent = data.value;
+            document.getElementById(`${type}Value`).textContent = data.value;
         }
 
         function reset(type) {
